@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Josefin+Sans:wght@300&family=Signika+Negative:wght@300;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/ce169708bd.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="flex-container">
@@ -38,6 +39,14 @@
         </div>
     </div>
     <script>
+
+        document.addEventListener('DOMContentLoaded', function(){
+            window.addEventListener('load', function(){
+                Swal.fire('Bienvenido a Que tanto sabes sobre Front-end!')
+              });
+        });
+
+
         let puntaje = document.getElementById('puntaje');
 
         resultado = 0;
@@ -215,17 +224,41 @@
             ];
 
         const respuestasDivs = document.querySelectorAll('.respuestas div div');
+
+
+
+        function barajasArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        barajasArray(preguntasYRespuestas);
+
+        // Luego, puedes mostrar las preguntas en el orden barajado
+        let indicePreguntaActual = 0;
+
         function cargarPregunta() {
-            const indiceAleatorio = Math.floor(Math.random() * preguntasYRespuestas.length);
-            const preguntaRandom = preguntasYRespuestas[indiceAleatorio].pregunta;
-            const opcionesDeRespuesta = preguntasYRespuestas[indiceAleatorio].opciones;
+            if (indicePreguntaActual < preguntasYRespuestas.length) {
+                const preguntaActual = preguntasYRespuestas[indicePreguntaActual];
+                tituloPregunta.textContent = preguntaActual.pregunta;
 
-            tituloPregunta.textContent = preguntaRandom;
+                // Llena los elementos div de opciones con las opciones de respuesta
+                respuestasDivs.forEach((div, index) => {
+                    div.textContent = preguntaActual.opciones[index];
+                });
 
-            // Llena los elementos div de opciones con las opciones de respuesta
-            respuestasDivs.forEach((div, index) => {
-                div.textContent = opcionesDeRespuesta[index];
-            });
+                indicePreguntaActual++; // Avanza al siguiente índice de pregunta
+            } else {
+                Swal.fire({
+                    title: 'Fin del juego!',
+                    text: `Tu puntaje fue: ${puntaje.textContent}`
+                });
+                tituloPregunta.textContent = 'Presiona el boton de reiniciar para empezar de nuevo';
+                respuestasDivs.style.display = 'none';
+
+            }
         }
         function verificarRespuesta(seleccion) {
             const preguntaActual = preguntasYRespuestas.find((pregunta) => pregunta.pregunta === tituloPregunta.textContent);
