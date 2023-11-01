@@ -41,7 +41,21 @@ body{
     text-align: center;
 }
 
+.opciones{
+    display: flex;
+    flex-direction: column;
+}
+
 .restart{
+    user-select: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 3ex;
+    color: white;
+}
+
+.reglas{
     user-select: none;
     cursor: pointer;
     margin-bottom: 20px;

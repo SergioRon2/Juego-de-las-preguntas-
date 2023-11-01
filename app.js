@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('load', function(){
-        Swal.fire('Bienvenido a Que tanto sabes sobre Front-end!')
+        Swal.fire('Bienvenido a Que tanto sabes sobre Front-end y Java!')
       });
 });
 
@@ -24,6 +24,16 @@ document.addEventListener('DOMContentLoaded', function(){
         window.location.href = 'index.html';
     });
 
+});
+
+let reglas = document.querySelector('.reglas');
+
+reglas.addEventListener('click', function(){
+    Swal.fire({
+        title: 'Reglas del juego',
+        icon: 'info',
+        text: 'Este juego se basa en resolver un quiz basico sobre front-end y un poco de Java, Estas son las reglas del juego, si respondes correctamente sumas 10 puntos, si respondes de manera incorrecta se restan 15 puntos, buena suerte!',
+    });
 });
 
 let tituloPregunta = document.querySelector('.titulo-pregunta');
@@ -178,7 +188,32 @@ const preguntasYRespuestas = [
         "Usando la propiedad 'display'."
         ],
         respuestaCorrecta: 1
-    }
+    },
+    {
+        pregunta: "¿Cuál es la palabra clave utilizada para declarar una clase en Java?",
+        opciones: ["class", "void", "public", "new"],
+        respuestaCorrecta: 0,
+      },
+      {
+        pregunta: "¿Cuál es el valor por defecto de un atributo de tipo entero (int) en Java si no se le asigna ningún valor?",
+        opciones: [0, 1, -1, "No tiene un valor por defecto"],
+        respuestaCorrecta: 0,
+      },
+      {
+        pregunta: "¿Qué tipo de estructura de control se utiliza para tomar decisiones en Java?",
+        opciones: ["for", "while", "if", "switch"],
+        respuestaCorrecta: 2,
+      },
+      {
+        pregunta: "¿Cómo se declara una variable constante en Java?",
+        opciones: ["Utilizando la palabra clave 'final'", "Utilizando la palabra clave 'static'", "Utilizando la palabra clave 'const'", "No se pueden declarar variables constantes en Java"],
+        respuestaCorrecta: 0,
+      },
+      {
+        pregunta: "¿Cuál es el método principal en una aplicación Java que se ejecuta cuando se inicia el programa?",
+        opciones: ["start()", "main()", "run()", "execute()"],
+        respuestaCorrecta: 1,
+      },
     ];
 
 const respuestasDivs = document.querySelectorAll('.respuestas div div');
@@ -209,13 +244,31 @@ function cargarPregunta() {
 
         indicePreguntaActual++; // Avanza al siguiente índice de pregunta
     } else {
-        Swal.fire({
-            title: 'Fin del juego!',
-            text: `Tu puntaje fue: ${puntaje.textContent}`
-        });
-        tituloPregunta.textContent = 'Presiona el boton de reiniciar para empezar de nuevo';
-        respuestasDivs.style.display = 'none';
-
+        if(parseInt(puntaje.textContent)<100){
+            Swal.fire({
+                title: 'Fin del juego! Perdiste',
+                text: `Tu puntaje fue: ${puntaje.textContent}`
+            });
+            tituloPregunta.textContent = 'Presiona el boton de reiniciar para empezar de nuevo';
+            respuestasDivs.style.display = 'none';
+    
+        } else if(parseInt(puntaje.textContent)<150){
+            Swal.fire({
+                title: 'Fin del juego! Sacaste un puntaje aceptable',
+                text: `Tu puntaje fue: ${puntaje.textContent}`
+            });
+            tituloPregunta.textContent = 'Presiona el boton de reiniciar para empezar de nuevo';
+            respuestasDivs.style.display = 'none';
+    
+        } else{
+            Swal.fire({
+                title: 'Fin del juego! Felicidades',
+                text: `Tu puntaje fue: ${puntaje.textContent}`
+            });
+            tituloPregunta.textContent = 'Presiona el boton de reiniciar para empezar de nuevo';
+            respuestasDivs.style.display = 'none';
+    
+        }
     }
 }
 function verificarRespuesta(seleccion) {
@@ -223,9 +276,19 @@ function verificarRespuesta(seleccion) {
 
     if (seleccion === preguntaActual.respuestaCorrecta) {
         // Respuesta correcta
+        Swal.fire({
+            icon: 'success',
+            title: 'Respuesta correcta',
+            text: 'Tienes 10 puntos mas!, presiona ok para continuar',
+          })
         puntaje.textContent = parseInt(puntaje.textContent) + 10; // Incrementa el puntaje
     } else {
         // Respuesta incorrecta
+        Swal.fire({
+            icon: 'error',
+            title: 'Respuesta incorrecta',
+            text: 'Tienes 15 puntos menos, presiona ok para continuar',
+          })
         puntaje.textContent = parseInt(puntaje.textContent) - 15; // Reduce el puntaje
     }
     cargarPregunta(); // Carga una nueva pregunta
